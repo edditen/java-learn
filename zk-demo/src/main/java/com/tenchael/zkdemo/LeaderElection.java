@@ -93,6 +93,12 @@ public class LeaderElection {
 				default:
 					//do nothing
 			}
+
+			//random cancel leadership taking to mock exception
+			if (((int) (Math.random() * 13)) % 2 == 0) {
+				System.out.println(name + " do *******************");
+				throw new CancelLeadershipException(name + " cancel leader take");
+			}
 		}
 
 		@Override
