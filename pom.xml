@@ -8,6 +8,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<modules>
 		<module>zk-demo</module>
+		<module>jvm-demo</module>
 	</modules>
 	<packaging>pom</packaging>
 
