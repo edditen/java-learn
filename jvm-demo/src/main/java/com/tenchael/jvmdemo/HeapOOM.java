@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * VM Args: -Xms20m -Xmx20m --XX:+HeapDumpOnOutOfMemoryError
+ * VM Args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=D:/data/logs/dump.hprof
  */
 public class HeapOOM {
 
