@@ -157,6 +157,22 @@ public class CuratorTest extends Assert {
 	}
 
 	@Test
+	public void testReentrant() throws Exception {
+		CuratorFramework client = getDefaultClient();
+		client.start();
+		String path = "/zk-test";
+		client.create().creatingParentsIfNeeded()
+				.withMode(CreateMode.EPHEMERAL)
+				.forPath(String.format("%s/0", path),
+						"init".getBytes());
+
+		client.create().creatingParentsIfNeeded()
+				.withMode(CreateMode.EPHEMERAL)
+				.forPath(String.format("%s/0", path),
+						"init".getBytes());
+	}
+
+	@Test
 	public void testStatVersion() throws Exception {
 		CuratorFramework client = getDefaultClient();
 		client.start();
@@ -369,6 +385,21 @@ public class CuratorTest extends Assert {
 		executor.shutdown();
 		TimeUnit.SECONDS.sleep(2);
 
+	}
+
+	@Test
+	public void test() {
+		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> new Runnable() {
+
+			@Override
+			public void run() {
+				printDate();
+			}
+		}, 1, 10, TimeUnit.SECONDS);
+	}
+
+	private void printDate() {
+		System.out.println(new Date());
 	}
 
 
