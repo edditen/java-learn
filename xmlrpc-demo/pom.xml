@@ -7,16 +7,25 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jvm-demo</artifactId>
+	<artifactId>xmlrpc-demo</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jvm-demo</name>
+	<name>xmlrpc-demo</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<curator-version>2.12.0</curator-version>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>fr.turri</groupId>
+			<artifactId>aXMLRPC</artifactId>
+			<version>1.12.0</version>
+		</dependency>
+
+
+	</dependencies>
 
 
 </project>

@@ -9,6 +9,7 @@
 	<modules>
 		<module>zk-demo</module>
 		<module>jvm-demo</module>
+		<module>xmlrpc-demo</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -119,7 +120,7 @@
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>1.7.5</version>
 			</dependency>
-			
+
 		</dependencies>
 	</dependencyManagement>
 
