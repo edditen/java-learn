@@ -23,6 +23,8 @@ import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.data.Stat;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,6 +38,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by tengzhizhang on 2018/3/14.
  */
 public class CuratorTest extends Assert {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CuratorTest.class);
+
     private String connString = "127.0.0.1:2181";
 
     private CuratorFramework getDefaultClient() {
@@ -275,25 +280,37 @@ public class CuratorTest extends Assert {
     }
 
     @Test
-    public void testSession() throws IOException {
-        ZkSessionClient client = new ZkSessionClient("127.0.0.1:2181");
-        client.start();
+    public void testSession() throws IOException, KeeperException, InterruptedException {
+        ZkSessionClient client = new ZkSessionClient("127.0.0.1:2181", 10000);
+        client.startZk();
+        List<String> children = client.getChildren("/");
+        LOGGER.info("{}", children);
         System.in.read();
     }
 
     public static class ZkSessionClient implements Watcher {
 
         private final String addresses;
+        private final int sessionTimeout;
         private ZooKeeper zk;
 
-        public ZkSessionClient(String addresses) {
+        public ZkSessionClient(String addresses, int sessionTimeout) {
             this.addresses = addresses;
+            this.sessionTimeout = sessionTimeout;
         }
 
-        public void start() {
+        public void startZk() {
             try {
-                zk = new ZooKeeper(addresses, 10000, this);
+                zk = new ZooKeeper(addresses, sessionTimeout, this);
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void stop() {
+            try {
+                zk.close();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -301,6 +318,11 @@ public class CuratorTest extends Assert {
         @Override
         public void process(WatchedEvent event) {
             System.out.println(event);
+        }
+
+        public List<String> getChildren(String path)
+                throws KeeperException, InterruptedException {
+            return zk.getChildren(path, this);
         }
     }
 
@@ -386,7 +408,7 @@ public class CuratorTest extends Assert {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.out.println(String.format("%s start running", this.name));
+                    System.out.println(String.format("%s startZk running", this.name));
                 }
             });
         }
@@ -414,7 +436,7 @@ public class CuratorTest extends Assert {
                     try {
                         barrier.setBarrier();
                         barrier.waitOnBarrier();
-                        System.out.println(String.format("%s start running", this.name));
+                        System.out.println(String.format("%s startZk running", this.name));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
